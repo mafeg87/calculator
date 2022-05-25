@@ -4,6 +4,14 @@ plugins {
 	id 'java'
 	id 'jacoco'
 	id 'checkstyle'
+	id "org.sonarqube" version "3.3"
+}
+
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "jenkins"
+  }
 }
 
 group = 'com.mafeg87'
