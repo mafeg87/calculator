@@ -37,5 +37,31 @@ pipeline {
                 ])
             }
         }
+        stage('Sonarqube') {
+            environment {
+               scannerHome = tool 'SonarQubeScanner'
+            }
+            steps {
+               withSonarQubeEnv('sonarqube') {
+                  sh "${scannerHome}/bin/sonar-scanner"
+                }
+                timeout(time: 10, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+            }
+       }
+
+        
     }
+
+    node {
+            stage('SCM') {
+            checkout scm
+        }
+        stage('SonarQube Analysis') {
+             withSonarQubeEnv() {
+             sh "./gradlew sonarqube"
+           }
+        }
+    }
+
 }
